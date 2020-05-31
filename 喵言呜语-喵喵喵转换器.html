@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <title>喵言呜语-喵喵喵转换器</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=cn">
+    <meta name='viewport' content='width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no' />
+    <script LANGUAGE="JavaScript">
+        var respecterCasse = true;
+        var ignorerCasse = false;
+        var motsEntiers = true;
+        var touteSousChaine = false;
+
+        function rechercher(cible, terme, respecterCasse, motSeulement) {
+            var ind = 0;
+            var suivant = 0;
+            if (!respecterCasse) {
+                terme = terme.toLowerCase();
+                cible = cible.toLowerCase();
+            }
+            while ((ind = cible.indexOf(terme, suivant)) >= 0) {
+                if (motSeulement) {
+                    var avant = ind - 1;
+                    var apres = ind + terme.length;
+                    if (!(espace(cible.charAt(avant)) && espace(cible.charAt(apres)))) {
+                        suivant = ind + terme.length;
+                        continue;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function remplacer(cible, ancienTerme, nouveauTerme, respecterCasse, motSeulement) {
+            var travail = cible;
+            var ind = 0;
+            var suivant = 0;
+            if (!respecterCasse) {
+                ancienTerme = ancienTerme.toLowerCase();
+                travail = cible.toLowerCase();
+            }
+            while ((ind = travail.indexOf(ancienTerme, suivant)) >= 0) {
+                if (motSeulement) {
+                    var avant = ind - 1;
+                    var apres = ind + ancienTerme.length;
+                    if (!(espace(travail.charAt(avant)) && espace(travail.charAt(apres)))) {
+                        suivant = ind + ancienTerme.length;
+                        continue;
+                    }
+                }
+                cible = cible.substring(0, ind) + nouveauTerme +
+                    cible.substring(ind + ancienTerme.length, cible.length);
+                travail = travail.substring(0, ind) + nouveauTerme +
+                    travail.substring(ind + ancienTerme.length, travail.length);
+                suivant = ind + nouveauTerme.length;
+                if (suivant >= travail.length) {
+                    break;
+                }
+            }
+            return cible;
+        }
+
+        function espace(check) {
+            var espace = " ,/<>?!`';:%^&()=|{}" + '"' + "\\\n\t";
+            for (var i = 0; i < espace.length; i++)
+
+                if (check == espace.charAt(i)) {
+                    return true;
+                }
+            if (check == "") {
+                return true;
+            }
+            if (check == null) {
+                return true;
+            }
+            return false;
+        }
+        // STOP HIDING -->
+        function creerMatrice(num) {
+            for (var i = 1; i <= num; i++) this[i] = "";
+            this.length = num;
+        }
+        var MEKO = new creerMatrice(26 + 6);
+        var AVIATION = new creerMatrice(26 + 6);
+        MEKO[01] = "呜喵"
+        MEKO[02] = "喵呜呜呜"
+        MEKO[03] = "喵呜喵呜"
+        MEKO[04] = "喵呜呜"
+        MEKO[05] = "呜"
+        MEKO[06] = "呜呜喵呜"
+        MEKO[07] = "喵喵呜"
+        MEKO[08] = "呜呜呜呜"
+        MEKO[09] = "呜呜"
+        MEKO[10] = "呜喵喵喵"
+        MEKO[11] = "喵呜喵"
+        MEKO[12] = "呜喵呜呜"
+        MEKO[13] = "喵喵"
+        MEKO[14] = "喵呜"
+        MEKO[15] = "喵喵喵"
+        MEKO[16] = "呜喵喵呜"
+        MEKO[17] = "喵喵呜喵"
+        MEKO[18] = "呜喵呜"
+        MEKO[19] = "呜呜呜"
+        MEKO[20] = "喵"
+        MEKO[21] = "呜呜喵"
+        MEKO[22] = "呜呜呜喵"
+        MEKO[23] = "呜喵喵"
+        MEKO[24] = "喵呜呜喵"
+        MEKO[25] = "喵呜喵喵"
+        MEKO[26] = "喵喵呜呜"
+        MEKO[27] = "喵呜喵呜呜"
+        MEKO[28] = "喵喵呜喵."
+        MEKO[29] = "喵喵喵喵"
+        MEKO[30] = "呜喵喵喵呜"
+        MEKO[31] = "呜呜呜喵呜"
+        MEKO[32] = "呜呜喵喵"
+        CARACTERES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ[@*]$#"
+
+        function CODE(LETTRE) {
+            if (LETTRE == " ") {
+                return " "
+            }
+            for (tg = 0; tg <= 26 + 6; tg++) {
+                var LT = CARACTERES.charAt(tg)
+                if (LT == LETTRE) {
+
+                    return MEKO[tg + 1]
+                }
+            }
+            return ""
+        }
+
+        function GO() {
+            var text = document.forms[0].valeur.value
+            text = text.toUpperCase()
+            var MSG = ""
+            var LTR = ""
+            NUM = text.length
+            for (t = 0; t <= NUM - 1; t++) {
+                if (text.charAt(t) == '^') {
+                    LTR = text.charAt(++t)
+                    switch (LTR) {
+                        case 'C':
+                        case 'c':
+                            LTR = "[";
+                            break;
+                        case 'G':
+                        case 'g':
+                            LTR = "@";
+                            break;
+                        case 'H':
+                        case 'h':
+                            LTR = "*";
+                            break;
+                        case 'J':
+                        case 'j':
+                            LTR = "]";
+                            break;
+                        case 'S':
+                        case 's':
+                            LTR = "$";
+                            break;
+                        case 'U':
+                        case 'u':
+                            LTR = "#";
+                            break;
+                    }
+                } else {
+                    LTR = text.charAt(t)
+                }
+                MSG = MSG + (CODE(LTR) + " ");
+            }
+            document.forms[0].OUTPUT.value = MSG
+        }
+
+        function UNGO() {
+            var text = document.forms[0].OUTPUT.value
+            text = text.toUpperCase()
+            var MSG = text + " "
+            for (th = 0; th <= 25 + 6; th++) {
+                AA = MEKO[th + 1]
+                BB = CARACTERES.charAt(th)
+                MSG = remplacer(MSG, AA, BB, false, true)
+            }
+            MSG = remplacer(MSG, "  ", "%")
+            MSG = remplacer(MSG, " ", "")
+            MSG = remplacer(MSG, "%", " ")
+            document.forms[0].valeur.value = MSG
+        }
+        var a = ($(document).height() - $('form').height()) / 2;
+        $('form').css('margin-top', a + 'px');
+    </script>
+    <style>
+        html {
+            font-family: "Microsoft Yahei";
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            margin: 0 auto;
+            overflow: hidden
+        }
+        
+        #s_search {
+            display: none;
+        }
+        
+        .s_pc_input {
+            float: center;
+            margin-left: 50px;
+            width: 200px;
+        }
+        
+        .s_pcsubmit {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: absolute;
+            margin-left: 171px;
+            margin-top: 2px;
+        }
+        
+        .s_pcsubmit:hover {
+            opacity: .8;
+        }
+        
+        .s_pcsubmit_o {
+            border: 2px solid #00a8e0;
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            margin-left: 6px;
+            border-radius: 50%;
+        }
+        
+        .spcinput {
+            background: #eee;
+            border: 0;
+            border-radius: 50px;
+            height: 30px;
+            text-indent: 10px;
+            width: 100%;
+            outline: 0;
+            font-size: 14px;
+            padding: 0;
+        }
+        
+        .spcinput:focus {
+            background: #ddd;
+        }
+        
+        .but {
+            background: #00a8e0;
+            border: none;
+            color: #FFFFFF;
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            vertical-align: middle;
+            width: auto;
+            overflow: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>喵喵喵翻译器</h3><br>
+    <form>
+
+        <h4>英文字母</h4>
+        <div class="s_pc_input">
+            <div class="s_pcsubmit" onclick="GO();">
+                <div class="s_pcsubmit_o"></div>
+            </div><input type="text" name="valeur" class="spcinput" id="spcinput" placeholder="请输入英文">
+        </div>
+        </br>
+
+        <h4>翻译喵文</h4>
+        <div class="s_pc_input">
+            <div class="s_pcsubmit" onclick="UNGO();">
+                <div class="s_pcsubmit_o"></div>
+            </div><input type="text" name="OUTPUT" class="spcinput" id="spcinput" placeholder="请输入喵文">
+        </div>
+        </br>
+        <input class="but" TYPE=reset VALUE='全部清空'> </br>
+        <h4>定义：长喵短呜，根据摩尔斯电码改制成，部分代码来自jb51.com</h4>
+    </form>
+
+</body>
+
+</html>
